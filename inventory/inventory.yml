@@ -1,0 +1,8 @@
+all:
+  hosts:
+    harbor:
+      ansible_host: 1.1.1.1
+    mongodb:
+      ansible_host: 1.1.1.1
+  vars:
+    ansible_user: root

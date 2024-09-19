@@ -1,0 +1,34 @@
+---
+- name: Find the latest backup file
+  ansible.builtin.find:
+    paths: "{{ mongodb_backup_dir }}"
+    file_type: file
+    patterns: "*"
+    recurse: no
+    get_checksum: yes
+  register: backup_files
+
+- name: Find the latest backup file
+  ansible.builtin.shell:
+    ls -dt "{{ mongodb_backup_dir }}"/* | head -1
+  register: latest_backup
+
+- name: Debug the sorted backup files
+  ansible.builtin.debug:
+    var: latest_backup.stdout
+  when: backup_files.matched > 0
+
+- name: Restore the latest backup
+  ansible.builtin.command: "sudo mongorestore --drop {{ latest_backup.stdout | trim }}/"
+  when: backup_files.matched > 0
+  register: restore_output
+
+- name: Debug the restore output
+  ansible.builtin.debug:
+    var: restore_output
+  when: backup_files.matched > 0
+
+- name: Start MongoDB
+  ansible.builtin.systemd:
+    name: mongod
+    state: started

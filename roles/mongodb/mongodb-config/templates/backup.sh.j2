@@ -1,0 +1,10 @@
+#!/bin/bash
+
+BACKUP_DIRECTORY="/var/backups/mongodb"
+
+# Date stamp (formated YYYYMMDD)
+CURRENT_DATE=$(date "+%Y%m%d")
+
+sudo mongodump --out $BACKUP_DIRECTORY/$CURRENT_DATE
+
+find $BACKUP_DIRECTORY/* -mtime +3 -exec rm {} \;

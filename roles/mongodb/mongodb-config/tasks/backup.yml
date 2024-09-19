@@ -1,0 +1,39 @@
+---
+- name: Create backup directory
+  ansible.builtin.file:
+    path: "{{ mongodb_backup_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy backup script
+  ansible.builtin.template:
+    src: backup.sh.j2
+    dest: "{{ mongodb_backup_dir }}/backup.sh"
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create cron job
+  ansible.builtin.cron:
+    name: "Backup MongoDB"
+    minute: "0"
+    hour: "0"
+    job: "{{ mongodb_backup_dir }}/backup.sh"
+    state: present
+    user: root
+    cron_file: mongodb_backup
+
+- name: Start cron service
+  ansible.builtin.systemd:
+    name: cron
+    state: started
+    enabled: yes
+
+- name: Create backup file
+  ansible.builtin.shell:
+    "{{ mongodb_backup_dir }}/backup.sh"
+  register: backup_output
+
+- name: Debug the backup output
+  ansible.builtin.debug:
+    var: backup_output

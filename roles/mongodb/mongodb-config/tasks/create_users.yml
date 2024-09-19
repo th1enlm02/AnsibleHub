@@ -1,0 +1,45 @@
+---
+- name: Create MongoDB users
+  community.mongodb.mongodb_user:
+    database: admin
+    name: "{{ mongodb_admin_user }}"
+    password: "{{ mongodb_admin_password }}"
+    roles: root
+    state: present
+  register: admin_user
+  when: ansible_host == mongodb_primary_ipv4
+  ignore_errors: true
+
+- name: Debug MongoDB admin user creation
+  ansible.builtin.debug:
+    var: admin_user
+
+- name: Create read-only user
+  community.mongodb.mongodb_user:
+    database: "{{ mongodb_database }}"
+    name: "{{ mongodb_read_user }}"
+    password: "{{ mongodb_read_password }}"
+    roles: read
+    state: present
+  register: read_user
+  when: ansible_host == mongodb_primary_ipv4
+  ignore_errors: true
+
+- name: Debug MongoDB read-only user creation
+  ansible.builtin.debug:
+    var: read_user
+
+- name: Create read-write user
+  community.mongodb.mongodb_user:
+    database: "{{ mongodb_database }}"
+    name: "{{ mongodb_read_write_user }}"
+    password: "{{ mongodb_read_write_password }}"
+    roles: readWrite,dbAdmin,userAdmin
+    state: present
+  register: read_write_user
+  when: ansible_host == mongodb_primary_ipv4
+  ignore_errors: true
+
+- name: Debug MongoDB read-write user creation
+  ansible.builtin.debug:
+    var: read_write_user

@@ -1,0 +1,24 @@
+# Backup configuration
+mongodb_backup_dir: "/var/backups/mongodb"
+
+# Replication configuration
+mongodb_primary_host: "mongo.primary.member"
+mongodb_primary_ipv4: 1.1.1.1
+mongodb_secondary_host: "mongo.secondary.member"
+mongodb_secondary_ipv4: 2.2.2.2
+mongodb_arbiter_host: "mongo.arbiter.member"
+mongodb_arbiter_ipv4: 3.3.3.3
+mongodb_port: 27017
+mongodb_replica_set: "rs0"
+mongodb_config_file: "/etc/mongod.conf"
+mongodb_arbiter_config_folder: "/var/lib/mongodb/arb"
+
+# Users configuration
+mongodb_admin_user: "admin"
+mongodb_admin_password: "admin"
+
+mongodb_database: "mydatabase"
+mongodb_read_user: "read_user"
+mongodb_read_password: "read_user_password"
+mongodb_read_write_user: "read_write_user"
+mongodb_read_write_password: "read_write_user_password"

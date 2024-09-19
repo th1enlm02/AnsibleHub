@@ -1,0 +1,40 @@
+---
+- name: Backup configuration
+  ansible.builtin.include_tasks:
+    file: backup.yml
+    apply:
+      become: true
+      tags:
+        - mongodb_backup
+  tags:
+    - mongodb_backup
+
+- name: Restore configuration
+  ansible.builtin.include_tasks:
+    file: restore.yml
+    apply:
+      become: true
+      tags:
+        - mongodb_restore
+  tags:
+    - mongodb_restore
+
+- name: Configure replica set
+  ansible.builtin.include_tasks:
+    file: replica_sets.yml
+    apply:
+      become: true
+      tags:
+        - mongodb_replica_set
+  tags:
+    - mongodb_replica_set
+
+- name: Create MongoDB users
+  ansible.builtin.include_tasks:
+    file: create_users.yml
+    apply:
+      become: true
+      tags:
+        - mongodb_users
+  tags:
+    - mongodb_users
